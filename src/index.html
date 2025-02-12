@@ -4,20 +4,51 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vanilla App Template</title>
-    <link rel="stylesheet" href="./css/styles.css" />
+    <title>Домашнє завдання №11 з курсу JavaScript 3.0</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/3.0.1/modern-normalize.min.css"
+      integrity="sha512-q6WgHqiHlKyOqslT/lgBgodhd03Wp4BEqKeW6nNtlOY4quzyG3VoQKFrieaCeSnuVseNKRGpGeDU3qPmabCANg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/modern-normalize@2.0.0/modern-normalize.min.css"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-    <load src="./partials/header.html" icon-path="img/sprite.svg#logo" />
-
-    <main>
-      <!-- Loads the specified .html file -->
-      <load src="./partials/vite-promo.html" />
-      <load src="./partials/badges.html" />
-    </main>
-
-    <load src="./partials/footer.html" />
-
+    <header></header>
+    <div class="wrapper">
+      <main>
+        <section id="search" name="search">
+          <h1 class="title">
+            Застосунок пошуку зображень на сервісі фото-стоку PixaBay за
+            ключовим словом і їх перегляду в галереї
+          </h1>
+          <form id="search-form" class="search-form">
+            <input
+              class="search-form-input"
+              type="text"
+              name="query"
+              autocomplete="off"
+              placeholder="Пошук зображень"
+            />
+            <button type="submit" class="search-btn">Пошук</button>
+          </form>
+          <!-- <div class="loader">
+            <p class="search-gallery-loading-txt">
+              Loading images, please wait...
+            </p>
+          </div> -->
+          <span class="loader"></span>
+          <ul class="image-search-list"></ul>
+        </section>
+        <!-- <section name="image-search" id="image-search">
+                </section> -->
+      </main>
+    </div>
     <script type="module" src="./main.js"></script>
   </body>
 </html>
