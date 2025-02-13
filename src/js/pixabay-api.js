@@ -45,7 +45,15 @@ export function queryPixabay(query) {
         return;
       }
     })
-    .catch(error => console.error('Помилка завантаження:', error))
+    //.catch(error => console.error('Помилка завантаження:', error))
+    .catch(error =>
+      iziToast.error({
+        title: 'Помилка',
+        message: `❌ Виникла помилка завантаження на стороні сервера Pixabay. Спробуйте іншим разом!`,
+        position: 'topCenter',
+        timeout: 5000,
+      })
+    )
     .finally(() => {
       hideLoader(); // Ховаємо лоадер в будь-якому випадку  (успіх або помилка)
     });
