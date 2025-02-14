@@ -5,8 +5,10 @@ export function showLoader() {
 }
 
 export function hideLoader() {
-  setTimeout(() => {
-    document.querySelector('#image-search').classList.remove('hidden'); // Показуєм контент
-    document.querySelector('.loader-container').style.display = 'none'; // Ховаємо лоадер
-  }, 2000);
+  document.querySelector('#image-search').classList.remove('hidden'); // Показуєм контент
+  document.querySelector('.loader-container').style.display = 'none'; // Ховаємо лоадер
+  // setTimeout(() => {
+  //   document.querySelector('#image-search').classList.remove('hidden'); // Показуєм контент
+  //   document.querySelector('.loader-container').style.display = 'none'; // Ховаємо лоадер
+  // }, 2000);
 }
