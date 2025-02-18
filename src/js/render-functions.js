@@ -9,7 +9,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 export function renderSearchImages(images) {
   const markup = images
     .map(image => {
-      return `<li class="image-search-list">
+      return `<li class="image-search-item" id="gallery-item">
               <div class="image-search-box">
                <a 
                 href="${image.largeImageURL}">
