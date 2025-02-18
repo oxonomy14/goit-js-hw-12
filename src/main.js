@@ -7,7 +7,7 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 let query = ''; // Змінна для збереження пошукового запиту
 let page = 1; // Починаємо з першої сторінки
-const perPage = 6; // Кількість зображень на сторінку
+const perPage = 40; // Кількість зображень на сторінку
 
 refs.form.addEventListener('submit', onFormSubmit);
 refs.btnLoadMore.addEventListener('click', onBtnClick);
