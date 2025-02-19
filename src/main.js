@@ -9,13 +9,13 @@ let query = ''; // Змінна для збереження пошукового
 let page = 1; // Починаємо з першої сторінки
 const perPage = 40; // Кількість зображень на сторінку
 
-refs.form.addEventListener('submit', onFormSubmit);
-refs.btnLoadMore.addEventListener('click', onBtnClick);
-
 refs.btnLoadMore.style.display = 'none'; // Сховати кнопку перед запитом
 refs.txtLoaderMore.style.display = 'none'; // Показати індикатор завантаження
 
-async function onFormSubmit(evt) {
+refs.form.addEventListener('submit', onFormSubmit);
+refs.btnLoadMore.addEventListener('click', onBtnClick);
+
+function onFormSubmit(evt) {
   evt.preventDefault();
 
   //console.log('Лог№1 - Кнопка "Пошук" натискається');
@@ -38,7 +38,7 @@ async function onFormSubmit(evt) {
     // console.log('Пошуковий запит:', query);
 
     try {
-      const images = await queryPixabay(query, page, perPage);
+      queryPixabay(query, page, perPage);
       // renderSearchImages(images); // запит до сервера Pixabay за пошуковою фразою
     } catch (error) {
       console.log(error);
@@ -60,7 +60,9 @@ async function onBtnClick() {
     refs.btnLoadMore.style.display = 'none';
     refs.txtLoaderMore.style.display = 'block';
 
-    const images = await queryPixabay(query, page, perPage);
+    //console.log('Перед запитом:', refs.txtLoaderMore.style.display); // Дебаг
+    await queryPixabay(query, page, perPage);
+    //console.log('Після запиту:', refs.txtLoaderMore.style.display); // Дебаг
 
     smoothScroll(); // Скрол після рендеру
   } catch (error) {
