@@ -1,6 +1,6 @@
 import { refs } from './refs';
 import axios from 'axios';
-import { renderSearchImages } from './render-functions';
+
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
@@ -39,9 +39,10 @@ export async function queryPixabay(query, page, perPage) {
       refs.btnLoadMore.style.display = 'none';
     }
     //console.log('Масив зображень:', images);
-    renderSearchImages(images);
+    // renderSearchImages(images);
 
-    return totalImages; // Повертаємо загальну кількість знайдених зображень
+    //return totalImages; // Повертаємо загальну кількість знайдених зображень
+    return { totalImages, images };
   } catch (error) {
     iziToast.error({
       title: 'Помилка',

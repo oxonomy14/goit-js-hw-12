@@ -1,5 +1,6 @@
 import { queryPixabay } from './js/pixabay-api';
 import { refs } from './js/refs';
+import { renderSearchImages } from './js/render-functions';
 
 import iziToast from 'izitoast';
 // Додатковий імпорт стилів
@@ -8,7 +9,7 @@ import 'izitoast/dist/css/iziToast.min.css';
 let query = ''; // Змінна для збереження пошукового запиту
 let page = 1; // Починаємо з першої сторінки
 const perPage = 40; // Кількість зображень на сторінку
-let totalPages = ''; // Загальна кількість сторінок (буде оновлюватися після запиту)
+let totalPages = 'null'; // Загальна кількість сторінок (буде оновлюватися після запиту)
 
 refs.btnLoadMore.style.display = 'none'; // Сховати кнопку перед запитом
 refs.txtLoaderMore.style.display = 'none'; // Сховати індикатор завантаження
@@ -23,6 +24,9 @@ async function onFormSubmit(evt) {
 
   refs.imageList.innerHTML = ''; // Перед пошуком за новим ключовим словом повністю очищаємо попередній вміст галереї
   page = 1; // Скидаємо номер сторінки
+  totalPages = 0; // ⚠️ Обнуляємо загальну кількість сторінок!
+
+  refs.btnLoadMore.style.display = 'none'; // ⚠️ Явно ховаємо кнопку перед запитом
   query = evt.currentTarget.elements.query.value.trim();
 
   if (!query) {
@@ -40,22 +44,24 @@ async function onFormSubmit(evt) {
     refs.btnLoadMore.style.display = 'none'; // Ховаємо кнопку перед новим пошуком
     refs.txtLoaderMore.style.display = 'block'; // Показуємо індикатор завантаження
     try {
-      const totalImages = await queryPixabay(query, page, perPage);
+      const { totalImages, images } = await queryPixabay(query, page, perPage);
 
       if (!totalImages) return; // Якщо запит не повернув даних, виходимо
+      renderSearchImages(images); // Відмальовуємо знайдені зображення
 
       totalPages = Math.ceil(totalImages / perPage); // Оновлюємо загальну кількість сторінок
       //console.log(`Всього сторінок: ${totalPages}`);
 
       if (totalPages > 1) {
         refs.btnLoadMore.style.display = 'block'; // Показуємо кнопку, якщо є більше однієї сторінки
+      } else {
+        iziToast.info({
+          title: 'Увага',
+          message: `🔹 Ви досягли кінця результатів пошуку`,
+          position: 'topCenter',
+          timeout: 5000,
+        });
       }
-      iziToast.info({
-        title: 'Увага',
-        message: `🔹 Ви досягли кінця результатів пошуку.`,
-        position: 'topCenter',
-        timeout: 5000,
-      });
     } catch (error) {
       iziToast.error({
         title: 'Помилка',
