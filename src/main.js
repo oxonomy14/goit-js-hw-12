@@ -8,14 +8,15 @@ import 'izitoast/dist/css/iziToast.min.css';
 let query = ''; // Змінна для збереження пошукового запиту
 let page = 1; // Починаємо з першої сторінки
 const perPage = 40; // Кількість зображень на сторінку
+let totalPages = ''; // Загальна кількість сторінок (буде оновлюватися після запиту)
 
 refs.btnLoadMore.style.display = 'none'; // Сховати кнопку перед запитом
-refs.txtLoaderMore.style.display = 'none'; // Показати індикатор завантаження
+refs.txtLoaderMore.style.display = 'none'; // Сховати індикатор завантаження
 
 refs.form.addEventListener('submit', onFormSubmit);
 refs.btnLoadMore.addEventListener('click', onBtnClick);
 
-function onFormSubmit(evt) {
+async function onFormSubmit(evt) {
   evt.preventDefault();
 
   //console.log('Лог№1 - Кнопка "Пошук" натискається');
@@ -36,15 +37,34 @@ function onFormSubmit(evt) {
     return;
   } else {
     // console.log('Пошуковий запит:', query);
-
+    refs.btnLoadMore.style.display = 'none'; // Ховаємо кнопку перед новим пошуком
+    refs.txtLoaderMore.style.display = 'block'; // Показуємо індикатор завантаження
     try {
-      queryPixabay(query, page, perPage);
-      // renderSearchImages(images); // запит до сервера Pixabay за пошуковою фразою
+      const totalImages = await queryPixabay(query, page, perPage);
+
+      if (!totalImages) return; // Якщо запит не повернув даних, виходимо
+
+      totalPages = Math.ceil(totalImages / perPage); // Оновлюємо загальну кількість сторінок
+      //console.log(`Всього сторінок: ${totalPages}`);
+
+      if (totalPages > 1) {
+        refs.btnLoadMore.style.display = 'block'; // Показуємо кнопку, якщо є більше однієї сторінки
+      }
+      iziToast.info({
+        title: 'Увага',
+        message: `🔹 Ви досягли кінця результатів пошуку.`,
+        position: 'topCenter',
+        timeout: 5000,
+      });
     } catch (error) {
-      console.log(error);
+      iziToast.error({
+        title: 'Помилка',
+        message: `❌ Щось зламалося. Треба звернутись до адміністратора сайту! Або спробуйте ще раз пізніше!`,
+        position: 'topCenter',
+        timeout: 5000,
+      });
     } finally {
-      //toggleLoadMore(true); // Сховати індикатор завантаження
-      refs.txtLoaderMore.style.display = 'none';
+      refs.txtLoaderMore.style.display = 'none'; // Сховати індикатор завантаження
     }
   }
   refs.form.reset();
@@ -56,20 +76,39 @@ function onFormSubmit(evt) {
 async function onBtnClick() {
   page += 1; // Збільшуємо сторінку
 
-  try {
-    refs.btnLoadMore.style.display = 'none';
-    refs.txtLoaderMore.style.display = 'block';
+  refs.btnLoadMore.style.display = 'none';
+  refs.txtLoaderMore.style.display = 'block';
 
-    //console.log('Перед запитом:', refs.txtLoaderMore.style.display); // Дебаг
-    await queryPixabay(query, page, perPage);
-    //console.log('Після запиту:', refs.txtLoaderMore.style.display); // Дебаг
+  try {
+    const totalImages = await queryPixabay(query, page, perPage);
+    if (!totalImages) return; // Якщо запит не повернув даних, виходимо
+
+    totalPages = Math.ceil(totalImages / perPage); // Оновлюємо загальну кількість сторінок
 
     smoothScroll(); // Скрол після рендеру
+    //console.log('Поточна група елементів:', page);
+    // console.log('Всього зображень:', totalImages);
+
+    if (page === totalPages) {
+      refs.btnLoadMore.style.display = 'none'; // Якщо досягли останньої сторінки - ховаємо кнопку
+      iziToast.info({
+        title: 'Увага',
+        message: `🔹 Ви досягли кінця результатів пошуку.`,
+        position: 'topCenter',
+        timeout: 5000,
+      });
+    } else {
+      refs.btnLoadMore.style.display = 'block';
+    }
   } catch (error) {
-    console.error(error);
+    iziToast.error({
+      title: 'Помилка',
+      message: `❌ Щось зламалося. Треба звернутись до адміністратора сайту! Або спробуйте ще раз пізніше!`,
+      position: 'topCenter',
+      timeout: 5000,
+    });
   } finally {
     refs.txtLoaderMore.style.display = 'none';
-    refs.btnLoadMore.style.display = 'block';
   }
 }
 

@@ -311,7 +311,7 @@ section {
 */
 /* Прячем контент до загрузки */
 .hidden {
-  display: none;
+  /*  display: none;*/
 }
 /*
 @keyframes spin {
