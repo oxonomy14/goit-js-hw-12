@@ -76,9 +76,9 @@ async function onFormSubmit(evt) {
   refs.form.reset();
 }
 
-// -----------  Натискання кнопки Load More  -------------------
+// -----------  Натискання кнопки Load More  ------------------- //
 
-// ---- Завантаження наступної сторінки ----
+// ---- Завантаження наступної сторінки ---- //
 async function onBtnClick() {
   page += 1; // Збільшуємо сторінку
 
@@ -86,8 +86,9 @@ async function onBtnClick() {
   refs.txtLoaderMore.style.display = 'block';
 
   try {
-    const totalImages = await queryPixabay(query, page, perPage);
+    const { totalImages, images } = await queryPixabay(query, page, perPage);
     if (!totalImages) return; // Якщо запит не повернув даних, виходимо
+    renderSearchImages(images); // Відмальовуємо знайдені зображення
 
     totalPages = Math.ceil(totalImages / perPage); // Оновлюємо загальну кількість сторінок
 
